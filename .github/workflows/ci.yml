@@ -79,8 +79,6 @@ jobs:
   fmt:
     name: formatting
     runs-on: ubuntu-latest
-    env:
-      RUSTUP_TOOLCHAIN: ${{ env.RUST_STABLE_VER }}
     steps:
       - uses: actions/checkout@v4
 
@@ -123,8 +121,6 @@ jobs:
   clippy-stable:
     name: cargo clippy
     runs-on: ${{ matrix.os }}
-    env:
-      RUSTUP_TOOLCHAIN: ${{ env.RUST_STABLE_VER }}
     strategy:
       matrix:
         os: [windows-latest, macos-latest, ubuntu-latest]
@@ -160,8 +156,6 @@ jobs:
   clippy-stable-wasm:
     name: cargo clippy (wasm32)
     runs-on: ubuntu-latest
-    env:
-      RUSTUP_TOOLCHAIN: ${{ env.RUST_STABLE_VER }}
     steps:
       - uses: actions/checkout@v4
 
@@ -191,8 +185,6 @@ jobs:
   test-stable:
     name: cargo test
     runs-on: ${{ matrix.os }}
-    env:
-      RUSTUP_TOOLCHAIN: ${{ env.RUST_STABLE_VER }}
     strategy:
       matrix:
         os: [windows-latest, macos-latest, ubuntu-latest]
@@ -229,8 +221,6 @@ jobs:
   test-stable-wasm:
     name: cargo test (wasm32)
     runs-on: ubuntu-latest
-    env:
-      RUSTUP_TOOLCHAIN: ${{ env.RUST_STABLE_VER }}
     steps:
       - uses: actions/checkout@v4
 
@@ -259,8 +249,6 @@ jobs:
   check-msrv:
     name: cargo check (msrv)
     runs-on: ${{ matrix.os }}
-    env:
-      RUSTUP_TOOLCHAIN: ${{ env.RUST_MIN_VER }}
     strategy:
       matrix:
         os: [windows-latest, macos-latest, ubuntu-latest]
@@ -272,6 +260,9 @@ jobs:
         with:
           toolchain: ${{ env.RUST_MIN_VER }}
           targets: x86_64-unknown-none
+
+      - name: select toolchain
+        run: echo "RUSTUP_TOOLCHAIN=${{ env.RUST_MIN_VER }}" >> $GITHUB_ENV
 
       - name: install cargo-hack
         uses: taiki-e/install-action@v2
@@ -292,8 +283,6 @@ jobs:
   check-msrv-wasm:
     name: cargo check (msrv) (wasm32)
     runs-on: ubuntu-latest
-    env:
-      RUSTUP_TOOLCHAIN: ${{ env.RUST_MIN_VER }}
     steps:
       - uses: actions/checkout@v4
 
@@ -302,6 +291,9 @@ jobs:
         with:
           toolchain: ${{ env.RUST_MIN_VER }}
           targets: wasm32-unknown-unknown
+
+      - name: select toolchain
+        run: echo "RUSTUP_TOOLCHAIN=${{ env.RUST_MIN_VER }}" >> $GITHUB_ENV
 
       - name: install cargo-hack
         uses: taiki-e/install-action@v2
